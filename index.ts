@@ -1,4 +1,5 @@
 type LogLevel = "debug" | "info" | "warning" | "error";
+
 const LEVEL_MAP = {
   debug: 0,
   info: 1,
@@ -24,7 +25,7 @@ const TARGETS = {
   },
 };
 
-class Logger {
+export default class Logger {
   targetConfigs: TargetConfig[];
 
   constructor(targetConfigs: TargetConfig[] = []) {
@@ -35,22 +36,17 @@ class Logger {
     this.targetConfigs = targetConfigs;
   }
 
+  addTargetConfigs(targetConfigs: TargetConfig[]) {
+    this.targetConfigs = [...this.targetConfigs, ...targetConfigs];
+  }
+
   log(str: string, logLevel: LogLevel = "debug") {
-    for (const config of this.targetConfigs) {
-      if (LEVEL_MAP[logLevel] < LEVEL_MAP[config.logLevel]) {
+    const len = this.targetConfigs.length;
+    for (var x = 0; x < len; x++) {
+      if (LEVEL_MAP[logLevel] < LEVEL_MAP[this.targetConfigs[x].logLevel]) {
         return;
       }
-      TARGETS[config.target](`[${logLevel}]: ${str}`);
+      TARGETS[this.targetConfigs[x].target](`[${logLevel}]: ${str}`);
     }
   }
 }
-const logger = new Logger([
-  { logLevel: "debug", target: "console" },
-  { logLevel: "error", target: "email" },
-]);
-
-// only prints debug console
-logger.log("hello world");
-
-// prints console and email
-logger.log("hello world", "error");
