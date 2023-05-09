@@ -27,3 +27,4 @@ logger.log("hello world");
 - Multi-Threading doesn't really apply for Javascript/Typescript codebases.
 - Using Typescript for self-explanatory code and typings.
 - Could be improved by a function which let's us remove target configs.
+- Adding tests would improve the codebase quality.
